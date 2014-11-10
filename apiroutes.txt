@@ -1,0 +1,41 @@
+API routes
+
+/api/rusers													POST
+         ../[RUID]											GET, DELETE, PUT, PATCH
+           		/actions/ 									-
+           		   	  ../verify?key=[VERIFICATION_KEY]		GET
+
+/api/ousers									POST
+           ../[OUID]						GET, DELETE
+           		  ../ruser  				GET
+           		  ../links					GET, POST
+           		  		../[OUID]			GET, DELETE
+
+
+/api/messages						POST, GET
+		   ../[MESSAGE_ID]			GET, DELETE
+		   ../
+
+/api/posts										GET, POST
+		../[POST_ID]							GET, DELETE, PUT, PATCH
+				  ../actions/					-
+				  		  ../status				GET, PUT
+				  		  ../report				GET, PUT
+				  		  ../vote				GET
+				  		 	  ../up				GET, PATCH
+				  		 	  ../down			GET, PATCH
+
+
+				  ../comments					GET, POST
+				  		   ../[ID]				GET, DELETE, PATCH
+				  		   		../status		GET, PUT
+				  		   		../report		GET, PUT
+   						  		../vote			GET
+				  			 	     ../up		GET, PATCH
+				  			 	     ../down	GET, PATCH
+				  			 	../children			GET, POST
+				  			 			 ../[ID]	GET, DELETE, PATCH
+
+
+/api/mods					POST
+	   ../[MOD_ID]			GET, DELETE

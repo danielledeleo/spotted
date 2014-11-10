@@ -1,0 +1,98 @@
+RELATIONS:
+schools--> post tables -> public posts
+      |              + -> private posts
+      |
+      +--> user tables -> real users
+      |              + -> obfuscated users
+      |
+      +--> 
+
+cities--> schools
+
+==------------==
+=( DATA TYPES )=
+==------------==
+
+POST:
+       id:  int                               PRIMARY KEY
+  message:  plaintext blob
+   poster:  int  (ref to obfuscated userid)
+ comments:  int  (ref to comment thread id)   NULL (for disabled)
+    media:  int  (ref to media id)            NULL (for none)
+ postdate:  timestamp
+    score:  int, int  (ups/downs)
+  pmprefs:  int  (none, school, city, all)
+    modid:  int  (ref to moddata)
+
+
+REALUSER:
+           id:  int      PRIMARY KEY
+      obfsids:  json (of arbitrary len)
+    emailaddr:  text
+  institution:  int  (ref to school in schools table)
+         city:  int  (ref to city in cities table)
+
+    userlevel:  int  (unverified, user, moderator, admin)
+      regtime:  timestamp
+    lastlogin:  timestamp
+     numspots:  int
+
+      session:  (???) (perhaps tracked in redis)
+     password:  text
+
+    modstatus:  int  (nocomment, nopost, novote)
+  banneduntil:  timestamp
+   modreports:  json (array of modreports)
+      
+  		scoreup:  int
+      scoredn:  int
+
+      pmprefs:  int (like posts, prefs)
+
+
+OBFSUSER:
+         id:  int 
+      alias:  string  (default: 'Anonymous')
+    realuid:  int     (ref to realuser)
+  anonymity:  int     (random factor to allow for alias dupes within
+                       one RUID)
+  linkedids:  json    (array of OUIDs)
+
+
+MODDATA:
+           id:  int
+      postref:  int     (ref to post)
+         time:  timestamp
+  moderatorid:  int     (ref to RUID of moderator, 0 for AutoMod)
+  actionsdone:  json
+      reasons:  json
+     previous:  int     (ref to moddataid)
+
+
+SCHOOL:
+          id:   int         PRIMARY KEY
+        name:   text
+   shortname:   varchar     (CU for Carleton etc)
+        city:   int       (ref to city)
+
+
+CITY:
+          id:   int         PRIMARY KEY
+        name:   text
+   shortname:   varchar     (OTT for Ottawa, etc.)
+     schools:   json        (array of school ids)
+
+PRIVATE_MESSAGE:
+          id:   int         PRIMARY KEY
+     postref:   int         (ref to post)
+   from_ouid:   int
+     to_ouid:   int
+     message:   text
+
+     moddata:   int         (ref to moddataid)
+
+COMMENT_THREAD:
+          id:   int         PRIMARY KEY
+     postref:   int
+     JSOOOOOOOOOON LOTS OF IT TOO
+
